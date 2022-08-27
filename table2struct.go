@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 //map for converting mysql type to golang types
@@ -160,11 +161,13 @@ func (t *Table2Struct) Run() error {
 	// 组装struct
 	var structContent string
 	for tableRealName, item := range tableColumns {
+		tableName := tableRealName
+
 		// 去除前缀
 		if t.prefix != "" {
-			tableRealName = tableRealName[len(t.prefix):]
+			tableName = tableRealName[len(t.prefix):]
 		}
-		tableName := tableRealName
+
 		structName := tableName
 		if t.config.StructNameToHump {
 			structName = t.camelCase(structName)
